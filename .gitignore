@@ -2,6 +2,8 @@
 
 TJK*
 error.log
+*.json
+*.csv
 
 # Configuration Files
 
