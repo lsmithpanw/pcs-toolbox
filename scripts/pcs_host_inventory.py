@@ -48,8 +48,10 @@ print(' done.')
 
 hosts = pc_api.execute_compute('GET', 'api/v1/hosts')
 
+"""
 with open("host_inventory.json", "w") as outfile:
     json.dump(hosts, outfile, indent=3)
+"""
 
 if args.output_to_csv:
     csvoutfile = open("host_inventory.csv", "w")
