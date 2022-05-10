@@ -56,7 +56,7 @@ with open("host_inventory.json", "w") as outfile:
 if args.output_to_csv:
     csvoutfile = open("host_inventory.csv", "w")
 
-output("host, package, version, source, cloudProvider, cloudaccount, resourceid, platformname, platformversion, platformrelease, platformdistro")
+output("host, package, version, source, cloudProvider, cloudaccount, resourceid, platformname, platformversion, platformrelease, platformdistro, cluster")
 for host in hosts:
     if args.hostname and host['hostname'] != args.hostname:
         continue
@@ -68,6 +68,7 @@ for host in hosts:
     platformversion = ""
     platformrelease = ""
     platformdistro = ""
+    cluster = ""
 
     if 'cloudMetadata' in host and 'provider' in host['cloudMetadata']:
         cloudProvider = host["cloudMetadata"]["provider"]
@@ -90,28 +91,41 @@ for host in hosts:
     if 'osDistro' in host:
         platformdistro = host["distro"]
 
+    if 'clusters' in host:
+        if isinstance(host["clusters"], list):
+            cluster = host["clusters"][0]
+        else:
+            cluster = host["clusters"]
+            print('scalar')
+
     if 'applications' in host:
         for app in host['applications']:
-            output("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" % (host['hostname'], app['name'], app['version'], "applications", cloudProvider, cloudaccount, resourceid, platformname, platformversion, platformrelease, platformdistro))
+            output("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" % (host['hostname'], app['name'], app['version'], "applications", cloudProvider, cloudaccount, resourceid, platformname, platformversion, platformrelease, platformdistro, cluster))
 
     if 'binaries' in host:
         for binary in host['binaries']:
-            output("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" % (host['hostname'], binary['name'], "", "binaries", cloudProvider, cloudaccount, resourceid, platformname, platformversion, platformrelease, platformdistro))
+            output("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" % (host['hostname'], binary['name'], "", "binaries", cloudProvider, cloudaccount, resourceid, platformname, platformversion, platformrelease, platformdistro, cluster))
 
     if 'packages' in host:
         for package in host['packages']:
             if 'pkgs' in package:
                 for pkg in package['pkgs']:
-                    output("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" % (host['hostname'], pkg['name'], pkg['version'], "packages", cloudProvider, cloudaccount, resourceid, platformname, platformversion, platformrelease, platformdistro))
+                    output("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" % (host['hostname'], pkg['name'], pkg['version'], "packages", cloudProvider, cloudaccount, resourceid, platformname, platformversion, platformrelease, platformdistro, cluster))
 
 """
-    del host["complianceIssues"]
-    del host["applications"]
-    del host["binaries"]
-    del host["packages"]
-    del host["vulnerabilities"]
+    if 'complianceIssues' in host:
+        del host["complianceIssues"]
+    if 'applications' in host:
+        del host["applications"]
+    if 'binaries' in host:
+        del host["binaries"]
+    if 'packages' in host:
+        del host["packages"]
+    if 'vulnerabilities' in host:
+        del host["vulnerabilities"]
     with open("host.json", "w") as outfile:
         json.dump(host, outfile, indent=3)
 """
+
 if args.output_to_csv:
     csvoutfile.close()
