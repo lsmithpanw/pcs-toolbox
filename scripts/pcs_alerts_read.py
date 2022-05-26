@@ -34,6 +34,11 @@ parser.add_argument(
     type=int,
     default=30,
     help='(Optional) - Time Range in days (default 30).')
+parser.add_argument(
+    '--exportfile',
+    type=str,
+    help='(Optional) Export file name for alerts.'
+)
 args = parser.parse_args()
 
 # --Initialize-- #
@@ -87,4 +92,5 @@ print()
 
 print('Alerts:')
 print(json.dumps(alerts_list, indent=3))
-pc_utility.write_json_file('alerts.json', alerts_list, pretty=True)
+if args.exportfile is not None:
+    pc_utility.write_json_file(args.exportfile, alerts_list, pretty=True)
