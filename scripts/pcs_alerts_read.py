@@ -46,7 +46,6 @@ pc_api.configure(settings)
 # ALERT GET
 
 # Sort out and build the filters.
-
 alerts_filter = {}
 if args.detailed:
     alerts_filter['detailed'] = True
@@ -61,6 +60,7 @@ alerts_filter['timeRange']['type']            = 'relative'
 alerts_filter['timeRange']['value']           = {}
 alerts_filter['timeRange']['value']['unit']   = 'day'
 alerts_filter['timeRange']['value']['amount'] = args.timerange
+
 if args.alertstatus is not None:
     temp_filter = {}
     temp_filter['name']     = 'alert.status'
@@ -86,4 +86,5 @@ print(' done.')
 print()
 
 print('Alerts:')
-print(json.dumps(alerts_list))
+print(json.dumps(alerts_list, indent=3))
+pc_utility.write_json_file('alerts.json', alerts_list, pretty=True)
