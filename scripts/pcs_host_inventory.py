@@ -22,6 +22,11 @@ parser.add_argument(
     action="store_true",
     help="(Optional) - Less console output"
 )
+parser.add_argument(
+    '--infile',
+    type=str,
+    help="(Optional) - Take JSON file input instead of API query"
+)
 
 args = parser.parse_args()
 csvoutfile = ""
@@ -46,7 +51,12 @@ print('Testing Compute API Access ...', end='')
 intelligence = pc_api.statuses_intelligence()
 print(' done.')
 
-hosts = pc_api.execute_compute('GET', 'api/v1/hosts')
+hosts = ""
+if args.infile:
+    with open(args.infile) as infile:
+        hosts = json.load(infile)
+else:
+    hosts = pc_api.execute_compute('GET', 'api/v1/hosts')
 
 """
 with open("host_inventory.json", "w") as outfile:
