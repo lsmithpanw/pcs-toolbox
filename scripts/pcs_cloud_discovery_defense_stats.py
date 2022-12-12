@@ -127,7 +127,7 @@ search_params = {'query': undefended_fargate_rql}
 undefended_fargate = pc_api.search_config_read(search_params)
 search_params = {'query': all_fargate_rql}
 all_fargate = pc_api.search_config_read(search_params)
-pprint.pprint(undefended_fargate)
+#pprint.pprint(undefended_fargate)
 
 # Print totals
 
@@ -152,16 +152,7 @@ if args.detailed:
     for task in undefended_fargate:
         accountID = task['accountId']
         region = task['regionId']
-        cluster = ''
+        cluster = 'N/A'
         defended = False
         arn = task['data']['taskDefinitionArn']
         output('aws-fargate, %s, %s, %s, %s, %s' % (accountID, region, cluster, defended, arn))
-
-    for task in set(all_fargate) ^ set(undefended_fargate):
-        accountID = task['accountId']
-        region = task['regionId']
-        cluster = ''
-        defended = True
-        arn = task['data']['taskDefinitionArn']
-        output('aws-fargate, %s, %s, %s, %s, %s' % (accountID, region, cluster, defended, arn))
-
